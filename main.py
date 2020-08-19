@@ -1,12 +1,22 @@
 import nltk
-import pandas as pd 
+import pandas as pd
+import warnings 
 import string
 import re
-import warnings 
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import metrics
 
-warnings.filterwarnings("ignore")
 
 nltk.download()
+warnings.filterwarnings("ignore")
+stopwords = stopwords.words("english")
+stemmer = PorterStemmer()
 
 
 #read file with data
@@ -29,20 +39,29 @@ print(data.shape)
 print(data.describe())
 print(data.info())
 
-#removing puncatuations and tokenization
+#remove stopwords, stemming
 def clean_text(text):
-    symbols = list(text)
-    removed_punctuation = "".join([char for char in symbols if char not in string.punctuation])
-    new_text = re.split("\W+", removed_punctuation)
-    return new_text
+    list_of_words = [stemmer.stem(i) for i in re.sub("[^a-zA-Z]", " ", text).split() if i not in stopwords]
+    return " ".join(list_of_words).lower()
+
 
 data["text"] = data["text"].apply(lambda text: clean_text(text))
 
+#split data on train and test datasets
 
+target = data["True/Fake"]
+X_train, X_test, y_train, y_test = train_test_split(data["text"], target, test_size=0.30, random_state=100)
 
+print("****** Shape of datasets ******")
+print(data.shape); print(X_train.shape); print(X_test.shape)
 
+#converting text to word frequency vectors
+vectorizer_tfidf = TfidfVectorizer(stop_words='english', max_df=0.7)
+train_tfIdf = vectorizer_tfidf.fit_transform(X_train.values.astype('U'))
+test_tfIdf = vectorizer_tfidf.transform(X_test.values.astype('U'))
 
-
+print("****** Shape of vectors with converted text ******")
+print(train_tfIdf.shape); print(test_tfIdf.shape)
 
 
 
