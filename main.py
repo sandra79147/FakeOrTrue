@@ -63,8 +63,20 @@ test_tfIdf = vectorizer_tfidf.transform(X_test.values.astype('U'))
 print("****** Shape of vectors with converted text ******")
 print(train_tfIdf.shape); print(test_tfIdf.shape)
 
+#create model
 
+nb_classifier = MultinomialNB()
+nb_classifier.fit(train_tfIdf, y_train)
 
+#predicting test values, display some of them and accuracy
+pred = nb_classifier.predict(test_tfIdf) 
+print(pred[:10])
+
+accuracy_tfidf = metrics.accuracy_score(y_test, pred)
+print(accuracy_tfidf)
+
+Conf_metrics_tfidf = metrics.confusion_matrix(y_test, pred2, labels=[1, 0])
+print(Conf_metrics_tfidf)
 
 
 
