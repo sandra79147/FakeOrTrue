@@ -50,7 +50,7 @@ data["text"] = data["text"].apply(lambda text: clean_text(text))
 #split data on train and test datasets
 
 target = data["True/Fake"]
-X_train, X_test, y_train, y_test = train_test_split(data["text"], target, test_size=0.30, random_state=100)
+X_train, X_test, y_train, y_test = train_test_split(data["text"], target, test_size=0.20, random_state=100)
 
 print("****** Shape of datasets ******")
 print(data.shape); print(X_train.shape); print(X_test.shape)
@@ -75,7 +75,7 @@ print(pred[:10])
 accuracy_tfidf = metrics.accuracy_score(y_test, pred)
 print(accuracy_tfidf)
 
-Conf_metrics_tfidf = metrics.confusion_matrix(y_test, pred2, labels=[1, 0])
+Conf_metrics_tfidf = metrics.confusion_matrix(y_test, pred, labels=[1, 0])
 print(Conf_metrics_tfidf)
 
 
