@@ -1,7 +1,4 @@
 ### Fake or True 
-
-### Description
-
 Classifying news as fake or true with a Naive Bayes Classifier
 
 ### Files
